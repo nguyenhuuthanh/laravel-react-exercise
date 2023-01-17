@@ -14,12 +14,12 @@ class ProfileController extends Controller
     /**
      * Get the profile.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param string $id
      * @return \Illuminate\Http\Response
      */
-    public function getProfile(Request $request)
+    public function getProfile(string $id)
     {
-        $user = User::where('custom_id', '=', $request->input('id'))->first();
+        $user = User::where('custom_id', '=', $id)->first();
 
         return new UserResource($user);
     }
