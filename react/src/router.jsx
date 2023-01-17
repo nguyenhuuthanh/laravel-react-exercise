@@ -7,6 +7,7 @@ import NotFound from "./views/NotFound";
 import Signup from "./views/Signup";
 import Users from "./views/Users";
 import UserForm from "./views/UserForm";
+import Profile from "./views/Profile";
 
 const router = createBrowserRouter([
   {
@@ -46,8 +47,12 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <Signup/>
-      }
+      },
     ]
+  },
+  {
+    path: '/profile/:customId',
+    element: <Profile/>
   },
   {
     path: "*",

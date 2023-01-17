@@ -1,6 +1,7 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axiosClient from "../axios-client.js";
+import {Link} from "react-router-dom";
 import {useStateContext} from "../context/ContextProvider.jsx";
 
 export default function UserForm() {
@@ -99,11 +100,15 @@ export default function UserForm() {
             <input type="password" onChange={ev => setUser({...user, password_confirmation: ev.target.value})} placeholder="Password Confirmation"/>
             <input id="uploadBtn" type="file" label="Avatar" name="avatar" onChange={ev => setUser({...user, avatar: ev.target.files[0]})} className="form-control"/>
             <div className="avatar">
-              <img src={`http://localhost/storage/${user.avatar}`} alt={user.name} width="100px" height="100px" className="border rounded-circle"/>
+              <img src={`http://localhost/storage/${user.avatar}`} alt={user.name} width="100px" height="auto" className="border rounded-circle"/>
             </div>
             <button className="btn">Save</button>
           </form>
         )}
+        <div className="profileLink">
+          <Link target={'_blank'} className="btn-add" to={'/profile/' + user.custom_id}>Profile Link</Link>
+        </div>
+
       </div>
     </>
   )
