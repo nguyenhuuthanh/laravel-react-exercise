@@ -25,3 +25,8 @@ For more information: https://laravel.com/docs/sail
 9. Copy `react/.env.example` into `.env` and adjust the `VITE_API_BASE_URL` parameter
 9. Run `npm install`
 10. Run `npm run dev` to start vite server for React
+
+## Output: I was testing on Mac OS environment
+- API url: localhost/api
+- Frontend url: localhost:3000
+- Profile route: http://localhost:3000/profile/232347
