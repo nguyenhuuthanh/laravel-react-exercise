@@ -12,10 +12,12 @@ export default function UserForm() {
     email: '',
     phone: '',
     password: '',
+    avatar: null,
     password_confirmation: ''
   })
   const [errors, setErrors] = useState(null)
   const [loading, setLoading] = useState(false)
+
   const {setNotification} = useStateContext()
 
   if (id) {
@@ -25,6 +27,7 @@ export default function UserForm() {
         .then(({data}) => {
           setLoading(false)
           setUser(data)
+          setUserImage(data.user.avatar);
         })
         .catch(() => {
           setLoading(false)
@@ -35,7 +38,16 @@ export default function UserForm() {
   const onSubmit = ev => {
     ev.preventDefault()
     if (user.id) {
-      axiosClient.put(`/users/${user.id}`, user)
+      const formData = new FormData();
+
+      for( var key in user ) {
+          formData.append(key, user[key])
+      }
+      formData.append('_method', 'patch')
+
+      axiosClient.post(`/users/${user.id}`, formData, {headers: {
+        'Content-Type': 'multipart/form-data',
+      }})
         .then(() => {
           setNotification('User was successfully updated')
           navigate('/users')
@@ -79,12 +91,16 @@ export default function UserForm() {
           </div>
         }
         {!loading && (
-          <form onSubmit={onSubmit}>
+          <form onSubmit={onSubmit} enctype="multipart/form-data">
             <input value={user.name} onChange={ev => setUser({...user, name: ev.target.value})} placeholder="Name"/>
             <input value={user.email} onChange={ev => setUser({...user, email: ev.target.value})} placeholder="Email"/>
             <input value={user.phone} onChange={ev => setUser({...user, phone: ev.target.value})} placeholder="Phone"/>
             <input type="password" onChange={ev => setUser({...user, password: ev.target.value})} placeholder="Password"/>
             <input type="password" onChange={ev => setUser({...user, password_confirmation: ev.target.value})} placeholder="Password Confirmation"/>
+            <input id="uploadBtn" type="file" label="Avatar" name="avatar" onChange={ev => setUser({...user, avatar: ev.target.files[0]})} className="form-control"/>
+            <div className="avatar">
+              <img src={`http://localhost/storage/${user.avatar}`} alt={user.name} width="100px" height="100px" className="border rounded-circle"/>
+            </div>
             <button className="btn">Save</button>
           </form>
         )}

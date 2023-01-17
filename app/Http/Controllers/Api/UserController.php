@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 
 class UserController extends Controller
@@ -59,6 +60,17 @@ class UserController extends Controller
         if (isset($data['password'])) {
             $data['password'] = bcrypt($data['password']);
         }
+
+        if ($request->hasFile('avatar')){
+            $image = $request->file('avatar');
+            // $fileName = time() . '.' . $image->getClientOriginalExtension();
+            // Storage::disk('local')->put('avatars', $image);
+            $name = '/avatars/' . uniqid() . '.' . $image->extension();
+            $image->storePubliclyAs('public', $name);
+
+            $data['avatar'] = $name;
+        }
+
         $user->update($data);
 
         return new UserResource($user);
