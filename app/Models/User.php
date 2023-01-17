@@ -7,10 +7,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->custom_id = IdGenerator::generate(['table' => 'users', 'field' => 'custom_id', 'length' => 6, 'prefix' =>date('y')]);
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
